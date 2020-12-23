@@ -15,7 +15,7 @@ module Part1
 --
 -- На вход функции подаются неотрицательные числа
 prob1 :: Int -> Int
-prob1 x = error "Implement me!"
+prob1 x = (3 * x + 123) `mod` 65537
 
 
 ------------------------------------------------------------
@@ -25,7 +25,9 @@ prob1 x = error "Implement me!"
 -- * нечётные числа увеличивает втрое и добавляет единицу
 -- * чётные числа делит на два
 prob2 :: Integer -> Integer
-prob2 n = error "Implement me!"
+prob2 num
+    | even num = num `div` 2
+    | odd num = num * 3 + 1
 
 
 ------------------------------------------------------------
@@ -50,7 +52,13 @@ prob2 n = error "Implement me!"
 --
 -- Для любой функции step и n == 1 ответом будет 0.
 prob3 :: (Integer -> Integer) -> Integer -> Integer
-prob3 step n = error "Implement me!"
+prob3 step n = counter n 0
+    where
+        counter :: Integer -> Integer -> Integer
+        counter 1 count = count
+        counter currentNum count = counter
+            (step currentNum)
+            (succ count)
 
 
 ------------------------------------------------------------
@@ -68,7 +76,17 @@ prob3 step n = error "Implement me!"
 --
 -- Число n по модулю не превосходит 10^5
 prob4 :: Integer -> Integer
-prob4 n = error "Implement me!"
+prob4 n
+    | n >= 0 = positive 1 1 n
+    | otherwise = negative 1 1 n
+    where
+        positive first second current
+            | current == 0 = first
+            | otherwise = positive second (first + second) (pred current)
+
+        negative first second current
+            | current == 0 = second
+            | otherwise = negative second (first - second) (succ current)
 
 
 ------------------------------------------------------------
@@ -80,4 +98,11 @@ prob4 n = error "Implement me!"
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 = error "Implement me!"
+prob5 n k = all (<k) $ getDivisorsWithCurrent 2 n
+    where
+        getDivisorsWithCurrent :: Integer -> Integer -> [Integer]
+        getDivisorsWithCurrent _ 1 = []
+        getDivisorsWithCurrent divisor number
+            | divisor * divisor > number = [number]
+            | number `mod` divisor == 0 = divisor : getDivisorsWithCurrent divisor (number `div` divisor)
+            | otherwise = getDivisorsWithCurrent (divisor + 1) number
