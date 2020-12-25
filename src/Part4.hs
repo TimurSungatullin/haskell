@@ -1,3 +1,5 @@
+{-# LANGUAGE InstanceSigs #-}
+
 module Part4 where
 
 -- | 8 tasks:
@@ -20,6 +22,12 @@ import Control.Applicative
 -- Написать экземпляр класса Functor для Parser
 -- (удовлетворяющий законам)
 instance Functor Parser where
+    fmap :: (a -> b) -> Parser a -> Parser b
+    fmap f (Parser p1) = Parser p2
+        where
+            p2 s = convert (p1 s)
+            convert results = map (\(s, val) -> (s, f val)) results
+
 ------------------------------------------------------------
 -- PROBLEM #34
 --
