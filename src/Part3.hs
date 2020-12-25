@@ -46,8 +46,10 @@ prob19 num = map (\d -> (head d, length d)) (groupList (getPrimeDivisors 2 num))
 -- Проверить, является ли число N совершенным (1<=N<=10^10)
 -- Совершенное число равно сумме своих делителей (меньших
 -- самого числа)
+getAllDivisors :: Integral a => a -> [a]
+getAllDivisors n = [a | a <- [1 .. (n -1)], n `rem` a == 0]
 prob20 :: Integer -> Bool
-prob20 a = a == sum (removeItem a (1 : getPrimeDivisors 2 a))
+prob20 a = a == sum (getAllDivisors a)
 
 removeItem :: Integer -> [Integer] -> [Integer]
 removeItem _ [] = []
@@ -60,10 +62,8 @@ removeItem x (y : ys)
 --
 -- Вернуть список всех делителей числа N (1<=N<=10^10) в
 -- порядке возрастания
-getAllDivisors :: Integral a => a -> [a]
-getAllDivisors n = [a | a <- [1 .. (n -1)], n `rem` a == 0]
 prob21 :: Integer -> [Integer]
-prob21 number = (getAllDivisors number) ++ [number]
+prob21 number = (removeItem number (getAllDivisors number)) ++ [number]
 
 ------------------------------------------------------------
 -- PROBLEM #22
@@ -114,9 +114,10 @@ reverseStr = foldl (\acc x -> x : acc) []
 -- представить как сумму чисел от 1 до какого-то K
 -- (1 <= N <= 10^10)
 prob24 :: Integer -> Bool
+isPerfect :: Integer -> Bool
+isPerfect n = r * r == n
+        where r = floor . sqrt $ fromIntegral n
 prob24 n = isPerfect (8 * n + 1)
-             where isPerfect m = r * r == m
-                    where r = floor . sqrt $ fromIntegral m
 -- Число треугольное, если 8 * n + 1 идеальный квадрат, потому что
 -- n = k * (k + 1) / 2 -> k^2 + k + 2n = 0 -> k1,k2 = (-1 +- sqrt(D) ) / 2
 
@@ -200,7 +201,7 @@ prob30 reqCount = head $
 
 -- Бесконечный список треугольных чисел.
 triangleNumbers :: [Integer]
-triangleNumbers = map (\n -> n * (n + 1) `div` 2) [0..]
+triangleNumbers = filter (\n -> isPerfect (8 * n + 1)) [0..]
 
 ------------------------------------------------------------
 -- PROBLEM #31
