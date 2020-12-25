@@ -36,6 +36,7 @@ test19 :: TestTree
 test19 = testGroup "P19"
   [ testCase "prob19 19 == [(19,1)]" $ prob19 19 @?= [(19,1)]
   , testCase "prob19 1 == []" $ prob19 1 @?= []
+  , testCase "prob19 2 == [(2, 1)]" $ prob19 2 @?= [(2, 1)]
   , testCase "prob19 2020 == [(2,2),(5,1),(101,1)]" $
     prob19 2020 @?= [(2,2),(5,1),(101,1)]
   ]

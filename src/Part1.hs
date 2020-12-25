@@ -97,12 +97,11 @@ prob4 n
 --
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
+getDivisorsWithCurrent :: Integer -> Integer -> [Integer]
+getDivisorsWithCurrent _ 1 = []
+getDivisorsWithCurrent divisor number
+    | divisor * divisor > number = [number]
+    | number `mod` divisor == 0 = divisor : getDivisorsWithCurrent divisor (number `div` divisor)
+    | otherwise = getDivisorsWithCurrent (divisor + 1) number
 prob5 :: Integer -> Integer -> Bool
 prob5 n k = all (<k) $ getDivisorsWithCurrent 2 n
-    where
-        getDivisorsWithCurrent :: Integer -> Integer -> [Integer]
-        getDivisorsWithCurrent _ 1 = []
-        getDivisorsWithCurrent divisor number
-            | divisor * divisor > number = [number]
-            | number `mod` divisor == 0 = divisor : getDivisorsWithCurrent divisor (number `div` divisor)
-            | otherwise = getDivisorsWithCurrent (divisor + 1) number
